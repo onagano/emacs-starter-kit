@@ -21,7 +21,7 @@ elpa-to-submit/nxhtml/etc/schema/xhtml-loader.rnc~
 tramp
 
 ## exported files
-*el
+starter-kit*el
 starter-kit*html
 doc
 eshell/lastdir
@@ -32,3 +32,9 @@ src
 
 ## org stuff
 .org-id-locations
+
+## my stuff
+*~
+imac.el
+onagano.el
+state

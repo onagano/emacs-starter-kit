@@ -148,3 +148,94 @@ the documentation for the Starter Kit to html.
                    :auto-postamble nil)))
 #+end_src
 
+
+* My own org-mode settings
+
+#+begin_src emacs-lisp
+(setq org-startup-indented t)
+
+(defun org-insert-upheading (arg)
+  "Insert upper level heading"
+  (interactive "P")
+  (org-insert-heading arg)
+  (cond ((org-on-heading-p) (org-do-promote))
+	((org-at-item-p) (org-indent-item -1))))
+(defun org-insert-heading-dwim (arg)
+  "Insert heading at the same level
+C-u to upper, C-u C-u to down side."
+  (interactive "p")
+  (case arg
+    (4 (org-insert-subheading nil))
+    (16 (org-insert-upheading nil))
+    (t (org-insert-heading nil))))
+(define-key org-mode-map (kbd "<C-return>") 'org-insert-heading-dwim)
+(define-key org-mode-map (kbd "<C-kp-enter>") 'org-insert-heading-dwim)
+
+;; (org-remember-insinuate)
+(setq org-directory "~/org/")
+(setq org-default-notes-file (expand-file-name "memo.org" org-directory))
+;; (setq org-remember-templates
+;;       '(("Note" ?n "** %?\n   %i\n    %a\n    %T" nil "Inbox")
+;; 	("Todo" ?t "** TODO %?\n    %i\n    %a\n    %T" nil "Inbox")))
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
+	 "* TODO %?\n %i\n %a")
+	("T" "Todo+" entry (file+headline "~/org/gtd.org" "Tasks")
+	 "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:")
+	("x" "org-protocol" entry (file+headline "~/org/gtd.org" "Org-protocol")
+	 "* %:description\n\n  Source: %:link\n\n  %:initial" :immediate-finish t :empty-lines 1)
+	("j" "Journal" entry (file+datetree "~/org/journal.org")
+	 "* %?\nEntered on %U\n %i\n %a")))
+
+(add-hook 'mail-mode-hook 'turn-on-orgtbl)
+
+;; (setq org-use-fast-todo-selection t)
+;; #+TODO: TODO | DONE
+;; #+TODO: REPORT BUG KNOWNCAUSE | FIXED
+;; #+TODO: | CANCELED
+(setq org-todo-keywords
+      '((sequence "TODO(t!)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(x!)" "CANCEL(c@)")
+	(sequence "APPT(a)" "|" "DONE(x)" "CANCEL(c)")))
+;; (setq org-log-done 'note)
+(setq org-log-into-drawer t)
+
+;; (setq org-fast-tag-selection-single-key t)
+;; #+TAGS: { @work(w)  @home(h)  @tennisclub(t) }  laptop(l)  pc(p)
+(setq org-tag-alist '((:startgroup . nil)
+		      ("@work" . ?w) ("@home" . ?h)
+		      ("@tennisclub" . ?t)
+		      (:endgroup . nil)
+		      ("laptop" . ?l) ("pc" . ?p)))
+
+(setq org-return-follows-link t)
+
+(setq org-refile-targets '((nil . (:level . 1))
+                           (org-agenda-files . (:level . 1))))
+
+(setq org-archive-location "~/org/2011Q1.org::")
+
+(setq org-feed-alist
+      '(("Slashdot"
+	 "http://rss.slashdot.org/Slashdot/slashdot"
+	 "~/org/slashdot.org" "Slashdot Entries")
+	("IKEDA Nobuo"
+	 "http://ikedanobuo.livedoor.biz/index.rdf"
+	 "~/org/ikenob.org" "IKEDA Nobuo Blog")))
+
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
+;; (global-set-key (kbd "C-c c") 'org-remember)
+(global-set-key (kbd "C-c c") 'org-capture)
+#+end_src
+
+** MobileOrg
+
+#+begin_src emacs-lisp
+(require 'org-mobile)
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
+(setq org-mobile-inbox-for-pull "~/org/from-mobile.org")
+;; (setq org-mobile-use-encryption nil)
+;; (setq org-mobile-encryption-password "")
+(setq org-mobile-force-id-on-agenda-items nil)
+#+end_src

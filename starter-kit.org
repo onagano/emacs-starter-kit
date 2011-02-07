@@ -342,6 +342,17 @@ Load up [[http://tromey.com/elpa/][ELPA]], the Emacs Lisp package manager
   (starter-kit-load "starter-kit-elpa.org")
 #+end_src
 
+*** Auto-install.el
+http://www.emacswiki.org/emacs/download/auto-install.el
+
+#+begin_src emacs-lisp
+(require 'auto-install)
+(add-to-list 'load-path auto-install-directory)
+;;(auto-install-update-emacswiki-package-name t)
+(auto-install-compatibility-setup)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+#+end_src
+
 *** Work around OS X bug
 
 Work around a bug on OS X where system-name is FQDN
@@ -398,21 +409,24 @@ Starter kit function definitions in [[file:starter-kit-defuns.org][starter-kit-d
 Key Bindings in [[file:starter-kit-bindings.org][starter-kit-bindings]]
 
 #+begin_src emacs-lisp
-(starter-kit-load "starter-kit-bindings.org")
+; Too intrusive to others so commented out.
+;(starter-kit-load "starter-kit-bindings.org")
 #+end_src
 
 *** Starter kit misc
 Miscellaneous settings in [[file:starter-kit-misc.org][starter-kit-misc]]
 
 #+begin_src emacs-lisp
-(starter-kit-load "starter-kit-misc.org")
+; Too intrusive to others so commented out.
+;(starter-kit-load "starter-kit-misc.org")
 #+end_src
 
 *** Starter kit registers
 Registers for jumping to commonly used files in [[file:starter-kit-registers.org][starter-kit-registers]]
 
 #+begin_src emacs-lisp
-(starter-kit-load "starter-kit-registers.org")
+; Too intrusive to others so commented out.
+;(starter-kit-load "starter-kit-registers.org")
 #+end_src
 
 ** Language/Mode Specific Files
