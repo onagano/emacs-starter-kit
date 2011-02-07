@@ -1,0 +1,70 @@
+#+TITLE: Host Specific Settings
+
+* Paths
+** Path for executables
+The default contains only followings.
+#+begin_example
+("/usr/bin" "/bin" "/usr/sbin" "/sbin"
+ "/Applications/Emacs.app/Contents/MacOS/bin")
+#+end_example
+
+Ensure to include those like w3m, git, etc.
+#+begin_src emacs-lisp
+(setq exec-path (cons "/usr/local/bin" exec-path))
+(setq exec-path (cons "/usr/local/git/bin" exec-path))
+#+end_src
+
+** Path for elisp libraries
+All external elisp files will be stored under .emacs.d.
+I won't add anymore here, even =/usr/local/share/emacs=.
+
+
+* Tools
+** SKK
+http://openlab.ring.gr.jp/skk/ddskk-ja.html
+
+#+begin_src emacs-lisp
+(setq skk-large-jisyo "/Applications/Emacs.app/Contents/Resources/etc/skk/SKK-JISYO.L")
+#+end_src
+
+** Migemo
+http://0xcc.net/migemo/
+http://plus-alpha-space.cocolog-nifty.com/blog/2009/12/carbon-emacsmig.html
+http://www.kaoriya.net/#CMIGEMO
+http://d.hatena.ne.jp/samurai20000/20100907/1283791433
+
+#+begin_src emacs-lisp
+(require 'migemo)
+(setq migemo-command "/usr/local/bin/cmigemo")
+(setq migemo-options '("-q" "--emacs"))
+(setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
+(setq migemo-user-dictionary nil)
+(setq migemo-regex-dictionary nil)
+(setq migemo-coding-system 'utf-8-unix)
+#+end_src
+
+** W3M
+http://w3m.sourceforge.net/index.ja.html
+
+#+begin_src emacs-lisp
+(add-to-list 'load-path "/Applications/Emacs.app/Contents/share/emacs/site-lisp/w3m/")
+(require 'w3m-load)
+;(setq browse-url-browser-function 'browse-url-default-macosx-browser)
+;(setq browse-url-browser-function 'w3m-browse-url)
+#+end_src
+
+** ESS-mode
+http://ess.r-project.org/
+
+#+begin_src emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/src/ess-mode/lisp/")
+(require 'ess-site)
+#+end_src
+
+** Twittering-mode
+http://twmode.sourceforge.net/ja/
+
+#+begin_src emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/src/twittering-mode/")
+(require 'twittering-mode)
+#+end_src
