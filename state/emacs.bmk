@@ -1,0 +1,52 @@
+;;;; Emacs Bookmark Format Version 1 ;;;;
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("org-refile-last-stored"
+ (filename . "~/org/gtd.org")
+ (front-context-string . "** TODO hoge tod")
+ (rear-context-string . "hoge uga fooooo\n")
+ (position . 7086))
+("org-capture-last-stored"
+ (filename . "~/org/gtd.org")
+ (front-context-string . "** TODO uga\n \n [")
+ (rear-context-string . "ault behavior]]\n")
+ (position . 3832))
+("org mode"
+ (filename . "~/.emacs.d/starter-kit-org.org")
+ (front-context-string . "* Starter Kit Or")
+ (rear-context-string . "Starter Kit]].\n\n")
+ (position . 126))
+("starter-kit.org"
+ (filename . "~/.emacs.d/starter-kit.org")
+ (front-context-string . "* Starter kit ba")
+ (rear-context-string . " Starter Kit.\n\n*")
+ (position . 11031))
+("yasnippet"
+ (filename . "~/.emacs.d/starter-kit.org")
+ (front-context-string . "*** Starter kit ")
+ (rear-context-string . "e or\nlanguage.\n\n")
+ (position . 17200))
+("init.el"
+ (filename . "~/.emacs.d/init.el")
+ (front-context-string . "(setq dotfiles-d")
+ (rear-context-string . "get loaded.\n;;\n\n")
+ (position . 129))
+("host init"
+ (filename . "~/.emacs.d/imac.org")
+ (front-context-string . "* Tools\n** SKK\nh")
+ (rear-context-string . "share/emacs=.\n\n\n")
+ (position . 548))
+("user init"
+ (filename . "~/.emacs.d/onagano.org")
+ (front-context-string . "* My previous in")
+ (rear-context-string . "cific Settings\n\n")
+ (position . 34))
+("org in buffer settings"
+ (front-context-string . "\n15.6 Summary of")
+ (rear-context-string . ": Miscellaneous\n")
+ (position . 509556)
+ (filename . "/Users/onagano/.emacs.d/src/org/doc/org")
+ (info-node . "In-buffer settings")
+ (handler . Info-bookmark-jump))
+)

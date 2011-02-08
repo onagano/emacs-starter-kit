@@ -18,13 +18,32 @@ Ensure to include those like w3m, git, etc.
 All external elisp files will be stored under .emacs.d.
 I won't add anymore here, even =/usr/local/share/emacs=.
 
+This is the list of where the load-path is set.
+- [[file:init.el::(add-to-list%20'load-path%20(expand-file-name][init.el]] to load org-mode first
+- [[file:starter-kit.org::*Load%20path%20etc.][Load path etc.]] (ELPA and more)
+- [[file:starter-kit.org::*Auto-install.el][Auto-install.el]] (another auto-install package)
+- [[file:starter-kit.org::*System/User%20specific%20customizations][System/User specific customizations]]
+  - [[file:starter-kit.org::*E-lisp%20customization][E-lisp customization]]
+- [[file:starter-kit-misc.org::*Color%20Themes][Color Themes]]
+
+** Path for info document
+Org-mode is directly loaded from =src= directory, not installed
+hardly.
+To read the latest info file, some code is added in [[file:starter-kit-org.org::*Ensure%20the%20Latest%20Org-mode%20manual%20is%20in%20the%20info%20directory][Ensure the Latest
+Org-mode manual is in the info directory]] and =Info-directory-list= is
+modified there.
+
 
 * Tools
+Elisp files under =~/.emacs.d/src= and its all sub-directories are
+automatically added to the load-path by =normal-top-level-add-subdirs-to-load-path=.
+See [[file:starter-kit.org::*E-lisp%20customization][E-lisp customization]] for detail.
+
 ** SKK
 http://openlab.ring.gr.jp/skk/ddskk-ja.html
 
 #+begin_src emacs-lisp
-(setq skk-large-jisyo "/Applications/Emacs.app/Contents/Resources/etc/skk/SKK-JISYO.L")
+(setq skk-large-jisyo (concat dotfiles-dir "src/skk/SKK-JISYO.L"))
 #+end_src
 
 ** Migemo
@@ -47,7 +66,6 @@ http://d.hatena.ne.jp/samurai20000/20100907/1283791433
 http://w3m.sourceforge.net/index.ja.html
 
 #+begin_src emacs-lisp
-(add-to-list 'load-path "/Applications/Emacs.app/Contents/share/emacs/site-lisp/w3m/")
 (require 'w3m-load)
 ;(setq browse-url-browser-function 'browse-url-default-macosx-browser)
 ;(setq browse-url-browser-function 'w3m-browse-url)
@@ -57,7 +75,6 @@ http://w3m.sourceforge.net/index.ja.html
 http://ess.r-project.org/
 
 #+begin_src emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/src/ess-mode/lisp/")
 (require 'ess-site)
 #+end_src
 
@@ -65,6 +82,5 @@ http://ess.r-project.org/
 http://twmode.sourceforge.net/ja/
 
 #+begin_src emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/src/twittering-mode/")
 (require 'twittering-mode)
 #+end_src

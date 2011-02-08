@@ -42,6 +42,14 @@
 (setq recentf-max-saved-items 500)
 (setq recentf-exclude '("/TAGS$" "/var/tmp/"))
 (require 'recentf-ext)
+;(setq ido-save-directory-list-file "~/.emacs.d/state/ido.last")
+;(when (> emacs-major-version 21)
+;  (ido-mode t)
+;  (setq ido-enable-prefix nil
+;        ido-enable-flex-matching t
+;        ido-create-new-buffer 'always
+;        ido-use-filename-at-point t
+;        ido-max-prospects 10))
 
 
 ;; bm.el
@@ -236,19 +244,19 @@
 (require 'html-fold)
 (setq html-fold-inline-list
       '(("[a:" ("a"))
-	("[c:" ("code"))
-	("[k:" ("kbd"))
-	("[v:" ("var"))
-	("[s:" ("samp"))
-	("[ab:" ("abbr" "acronym"))
-	("[lab:" ("label"))
-	("[opt:" ("option"))
-	("[rss:" ("rss"))
-	("[link:" ("link"))
-	))
+        ("[c:" ("code"))
+        ("[k:" ("kbd"))
+        ("[v:" ("var"))
+        ("[s:" ("samp"))
+        ("[ab:" ("abbr" "acronym"))
+        ("[lab:" ("label"))
+        ("[opt:" ("option"))
+        ("[rss:" ("rss"))
+        ("[link:" ("link"))
+        ))
 (setq html-fold-block-list
       '("script" "style" "table"
-	"description" "content"))
+        "description" "content"))
 (add-hook 'html-mode-hook 'html-fold-mode)
 
 
@@ -317,14 +325,14 @@
 (defun my-anything ()
   (interactive)
   (anything-other-buffer '(anything-c-source-buffers
-			   anything-c-source-recentf)
-			 "*my anything*"))
+                           anything-c-source-recentf)
+                         "*my anything*"))
 
 
 ;; Miscellaneous
 ;; See "Emacs Technique Bible" by Rubikitch p.59.
 (global-hl-line-mode 1)
-(set-face-background 'hl-line "lightgreen")
+(set-face-background 'hl-line "darkgreen")
 (savehist-mode 1)
 (setq-default save-place t)
 (setq save-place-file "~/.emacs.d/state/emacs-places")
@@ -353,6 +361,25 @@
 
 ;; Miscellaneous part 2
 (ffap-bindings)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(windmove-default-keybindings)
+(setq backup-directory-alist `(("." . ,(expand-file-name
+                                        (concat dotfiles-dir "backups")))))
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(setq frame-title-format '(buffer-file-name "%f" ("%b")))
+
+
+;; Color theme
+(require 'color-theme)
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)))
+(color-theme-railscasts)
+
+
+;; Magit
+(require 'magit)
+
 
 ;; (iswitchb-mode 1)
 ;; (setq read-buffer-function 'iswitchb-read-buffer)

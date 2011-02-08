@@ -263,7 +263,7 @@ This section contains all code implementing the Emacs Starter Kit.
   
   (setq autoload-file (concat dotfiles-dir "loaddefs.el"))
   (setq package-user-dir (concat dotfiles-dir "elpa"))
-  (setq custom-file (concat dotfiles-dir "custom.el"))
+  (setq custom-file (concat dotfiles-dir "emacs-custom.el"))
 #+end_src
 
 *** Ubiquitous Packages
@@ -350,7 +350,6 @@ http://www.emacswiki.org/emacs/download/auto-install.el
 (add-to-list 'load-path auto-install-directory)
 ;;(auto-install-update-emacswiki-package-name t)
 (auto-install-compatibility-setup)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 #+end_src
 
 *** Work around OS X bug
@@ -409,7 +408,7 @@ Starter kit function definitions in [[file:starter-kit-defuns.org][starter-kit-d
 Key Bindings in [[file:starter-kit-bindings.org][starter-kit-bindings]]
 
 #+begin_src emacs-lisp
-; Too intrusive to others so commented out.
+; Too intrusive, commented out.
 ;(starter-kit-load "starter-kit-bindings.org")
 #+end_src
 
@@ -417,7 +416,7 @@ Key Bindings in [[file:starter-kit-bindings.org][starter-kit-bindings]]
 Miscellaneous settings in [[file:starter-kit-misc.org][starter-kit-misc]]
 
 #+begin_src emacs-lisp
-; Too intrusive to others so commented out.
+; Too intrusive, commented out.
 ;(starter-kit-load "starter-kit-misc.org")
 #+end_src
 
@@ -425,7 +424,7 @@ Miscellaneous settings in [[file:starter-kit-misc.org][starter-kit-misc]]
 Registers for jumping to commonly used files in [[file:starter-kit-registers.org][starter-kit-registers]]
 
 #+begin_src emacs-lisp
-; Too intrusive to others so commented out.
+; Too intrusive, commented out.
 ;(starter-kit-load "starter-kit-registers.org")
 #+end_src
 
@@ -442,17 +441,16 @@ inspired by TextMate's templating syntax.
 
 load the yasnippet bundle
 #+begin_src emacs-lisp
-  (add-to-list 'load-path
-               (expand-file-name  "yasnippet"
-                                  (expand-file-name "src"
-                                                    dotfiles-dir)))
   (require 'yasnippet)
   (yas/initialize)
 #+end_src
 
 load the snippets defined in the =./snippets/= directory
 #+begin_src emacs-lisp
-  (yas/load-directory (expand-file-name "snippets" dotfiles-dir))
+  (setq yas-mine (expand-file-name "snippets" dotfiles-dir))
+  (setq yas-dist (concat dotfiles-dir "src/yasnippet/snippets"))
+  (setq yas/root-directory (list yas-mine yas-dist))
+  (mapc 'yas/load-directory yas/root-directory)
 #+end_src
 
 *** Starter kit Org-mode
