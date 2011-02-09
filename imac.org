@@ -39,13 +39,6 @@ Elisp files under =~/.emacs.d/src= and its all sub-directories are
 automatically added to the load-path by =normal-top-level-add-subdirs-to-load-path=.
 See [[file:starter-kit.org::*E-lisp%20customization][E-lisp customization]] for detail.
 
-** SKK
-http://openlab.ring.gr.jp/skk/ddskk-ja.html
-
-#+begin_src emacs-lisp
-(setq skk-large-jisyo (concat dotfiles-dir "src/skk/SKK-JISYO.L"))
-#+end_src
-
 ** Migemo
 http://0xcc.net/migemo/
 http://plus-alpha-space.cocolog-nifty.com/blog/2009/12/carbon-emacsmig.html
@@ -69,18 +62,4 @@ http://w3m.sourceforge.net/index.ja.html
 (require 'w3m-load)
 ;(setq browse-url-browser-function 'browse-url-default-macosx-browser)
 ;(setq browse-url-browser-function 'w3m-browse-url)
-#+end_src
-
-** ESS-mode
-http://ess.r-project.org/
-
-#+begin_src emacs-lisp
-(require 'ess-site)
-#+end_src
-
-** Twittering-mode
-http://twmode.sourceforge.net/ja/
-
-#+begin_src emacs-lisp
-(require 'twittering-mode)
 #+end_src

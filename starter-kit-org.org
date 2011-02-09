@@ -164,20 +164,26 @@ Additionally, my settings.
   (setq org-startup-indented t)
   (setq org-startup-folded 'content)
   (setq org-return-follows-link t)
-  (setq org-id-track-globally nil)
   (setq org-directory "~/org/")
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c l") 'org-store-link)
 #+end_src
 
+FYI.
+#+begin_example
+  (setq org-id-track-globally nil)
+  (setq org-link-to-org-use-id nil)
+#+end_example
+
 ** Tags
+You can make a group using =(:startgroup . nil)= and =(:endgroup . nil)=.
+
 #+begin_src emacs-lisp
-  (setq org-tag-alist '((:startgroup . nil)
-                        ("@work" . ?w) ("@home" . ?h)
-                        ("@tennisclub" . ?t)
-                        (:endgroup . nil)
-                        ("laptop" . ?l) ("pc" . ?p)))
+  (setq org-tag-alist '(("home" . ?h)
+                        ("work" . ?w)
+                        ("desk" . ?d)
+                        ("mobile" . ?m)))
 #+end_src
 
 FYI.
@@ -186,10 +192,12 @@ FYI.
 #+end_example
 
 ** Todos
+[[info:org:TODO%20Items][info:org:TODO Items]]
+
 #+begin_src emacs-lisp
   (setq org-todo-keywords
-        '((sequence "TODO(t!)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(x!)" "CANCEL(c@)")
-          (sequence "APPT(a)" "|" "DONE(x)" "CANCEL(c)")))
+        '((sequence "TODO(t!)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(x!)" "CANCELD(c@)")
+          (sequence "APPT(a!)" "|" "DONE(x!)" "CANCELD(c@)")))
   (setq org-log-into-drawer t)
 #+end_src
 
@@ -200,28 +208,36 @@ FYI.
 #+end_example
 
 ** Capture
+[[info:org:Template%20elements][info:org:Template elements]]
+[[info:org:Template%20expansion][info:org:Template expansion]]
+
 #+begin_src emacs-lisp
   (setq org-default-notes-file (concat org-directory "notes.org"))
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
-           "* TODO %?\n %i\n %a")
-          ("T" "Todo+" entry (file+headline "~/org/gtd.org" "Tasks")
-           "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:")
-          ("x" "org-protocol" entry (file+headline "~/org/gtd.org" "Org-protocol")
-           "* %:description\n\n  Source: %:link\n\n  %:initial" :immediate-finish t :empty-lines 1)
-          ("j" "Journal" entry (file+datetree "~/org/journal.org")
-           "* %?\nEntered on %U\n %i\n %a")))
+        '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
+           "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:\n%i\n%a")
+          ("x" "org-protocol" entry (file+headline org-default-notes-file "Inbox")
+           "* %:description\n:LOGBOOK:\n- Created on %U\n:END:\nSource: %:link\n%:initial"
+           :immediate-finish t :empty-lines 1)))
 #+end_src
 
 ** Refile
+[[info:org:Refiling%20notes][info:org:Refiling notes]]
+
 #+begin_src emacs-lisp
-  (setq org-refile-targets '((nil . (:level . 1))
-                            (org-agenda-files . (:level . 1))))
+  (setq org-refile-targets '((org-agenda-files . (:level . 1))))
 #+end_src
 
 ** Archive
+[[info:org:Archiving]]
+
 #+begin_src emacs-lisp
-  (setq org-archive-location (concat org-directory "2011Q1.org::"))
+  (setq archives-dir (concat org-directory "archives"))
+  (make-directory archives-dir t)
+  (setq org-archive-location (concat archives-dir "/"
+                                     (format-time-string "%Y"
+                                     (current-time))
+                                     ".org::"))
 #+end_src
 
 ** Agenda
@@ -238,34 +254,16 @@ The file is [[~/.emacs.d/emacs-custom.el]].
   (setq org-mobile-force-id-on-agenda-items nil)
 #+end_src
 
+FYI.
 #+begin_example
 (setq org-mobile-use-encryption nil)
 (setq org-mobile-encryption-password "")
 #+end_example
 
-** Misc.
+** RSS
+The the info document [[info:org:RSS%20Feeds][info:org:RSS Feeds]] for details.
+
 #+begin_src emacs-lisp :tangle no
-  (defun org-insert-upheading (arg)
-    "Insert upper level heading"
-    (interactive "P")
-    (org-insert-heading arg)
-    (cond ((org-on-heading-p) (org-do-promote))
-          ((org-at-item-p) (org-indent-item -1))))
-  
-  (defun org-insert-heading-dwim (arg)
-    "Insert heading at the same level
-  C-u to upper, C-u C-u to down side."
-    (interactive "p")
-    (case arg
-      (4 (org-insert-subheading nil))
-      (16 (org-insert-upheading nil))
-      (t (org-insert-heading nil))))
-  
-  (define-key org-mode-map (kbd "<C-return>") 'org-insert-heading-dwim)
-  (define-key org-mode-map (kbd "<C-kp-enter>") 'org-insert-heading-dwim)
-  
-  (add-hook 'mail-mode-hook 'turn-on-orgtbl)
-  
   (setq org-feed-alist
         '(("Slashdot"
            "http://rss.slashdot.org/Slashdot/slashdot"
@@ -274,4 +272,3 @@ The file is [[~/.emacs.d/emacs-custom.el]].
            "http://ikedanobuo.livedoor.biz/index.rdf"
            "~/org/ikenob.org" "IKEDA Nobuo Blog")))
 #+end_src
-

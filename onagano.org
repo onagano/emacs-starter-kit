@@ -1,7 +1,248 @@
 #+TITLE: User Specific Settings
 
-* My previous init.el
+* Available settings in standard distribution
+** Better default settings
+See "Emacs Technique Bible" by Rubikitch p.59.
 
+#+begin_src emacs-lisp
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "darkgreen")
+(savehist-mode 1)
+(setq-default save-place t)
+(setq save-place-file "~/.emacs.d/state/emacs-places")
+(require 'saveplace)
+(setq savehist-file "~/.emacs.d/state/history")
+(show-paren-mode 1)
+(global-set-key (kbd "C-h") 'delete-backward-char)
+(display-time)
+(line-number-mode 1)
+(column-number-mode 1)
+(transient-mark-mode 1)
+(setq gc-cons-threshold (* 10 gc-cons-threshold))
+(setq message-log-max 10000)
+(setq enable-recursive-minibuffers t)
+(setq use-dialog-box nil)
+(defalias 'message-box 'message)
+(setq history-length 1000)
+(setq echo-keystrokes 0.1)
+(setq large-file-warning-threshold (* 25 1024 1024))
+(defadvice abort-recursive-edit (before minibuffer-save activate)
+  (when (eq (selected-window) (active-minibuffer-window))
+    (add-to-history minibuffer-history-variable (minibuffer-contents))))
+(defalias 'yes-or-no-p 'y-or-n-p)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+(ffap-bindings)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(windmove-default-keybindings)
+(setq backup-directory-alist `(("." . ,(expand-file-name
+                                        (concat dotfiles-dir "backups")))))
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(setq frame-title-format '(buffer-file-name "%f" ("%b")))
+#+end_src
+
+** Better libraries
+#+begin_src emacs-lisp
+;; (iswitchb-mode 1)
+;; (setq read-buffer-function 'iswitchb-read-buffer)
+;; (setq iswitchb-regexp nil)
+;; (setq iswitchb-prompt-newbuffer nil)
+;; (ido-mode 1)
+;; (ido-everywhere 1)
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+(setq uniquify-ignore-buffers-re "*[^*]+*")
+
+(setq bookmark-save-flag 1)
+(progn
+  (setq bookmark-sort-flag nil)
+  (defun bookmark-arrange-latest-top ()
+    (let ((latest (bookmark-get-bookmark bookmark)))
+      (setq bookmark-alist (cons latest (delq latest bookmark-alist))))
+    (bookmark-save))
+  (add-hook 'bookmark-after-jump-hook 'bookmark-arrange-latest-top))
+(setq bookmark-default-file "~/.emacs.d/state/emacs.bmk")
+
+;; (setq server-host "localhost")
+;; (setq server-use-tcp t)
+;; (server-start)
+
+(define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
+
+(auto-insert-mode)
+(setq auto-insert-directory "~/.emacs.d/insert/")
+;; (define-auto-insert "\\.txt$" "hoge-template.txt")
+;; (define-auto-insert "\\.txt$" (lambda () (insert "time") (yas/expand)))
+
+(defvar kmacro-save-file "~/.emacs.d/state/kmacro"
+  "File that keeps your keyboard macros.")
+(defun kmacro-save (symbol)
+  (interactive "SName for last kbd macro: ")
+  (name-last-kbd-macro symbol)
+  (with-current-buffer (find-file-noselect kmacro-save-file)
+    (goto-char (point-max))
+    (insert-kbd-macro symbol)
+    (basic-save-buffer)))
+(if (file-exists-p kmacro-save-file) (load kmacro-save-file))
+
+(global-set-key (kbd "C-c r") 'query-replace)
+(defalias 'qrr 'query-replace-regexp)
+
+(follow-mode)
+
+(require 'hideif)
+(add-hook 'c-mode-common-hook 'hide-ifdef-mode)
+
+(which-func-mode 1)
+(setq which-func-modes t)
+;; (delete (assoc 'which-func-mode mode-line-format) mode-line-format)
+;; (setq-default header-line-format '(which-func-mode ("" which-func-format)))
+
+;; flymake-mode
+;; http://www.emacswiki.org/emacs/FlyMake
+;; Add following line into your Makefile.
+;; CC=gcc
+;; check-syntax:
+;; <TAB>$(CC) $(CFLAGS) -Wall -Wextra -pedantic -fsyntax-only $(CHK_SOURCES)
+;(add-hook 'c-mode-common-hook (lambda () (flymake-mode t)))
+#+end_src
+
+** Calendar and Diary
+#+begin_src emacs-lisp
+;; (setq calendar-latitude +35.427768)
+;; (setq calendar-longitude +140.296875)
+;; (setq calendar-location-name "Mobara, Japan")
+;; (setq calendar-time-zone +540)
+;; (setq calendar-standard-time-zone-name "JST")
+;; (setq calendar-daylight-time-zone-name "JST")
+;; (setq diary-file "~/org/diary")
+;; (setq calendar-date-style 'iso)
+;; ;(calendar-set-date-style 'iso)
+;; (setq calendar-week-start-day 1) ; Monday
+#+end_src
+
+* Tools
+** SKK
+http://openlab.ring.gr.jp/skk/ddskk-ja.html
+
+#+begin_src emacs-lisp
+(setq skk-large-jisyo (concat dotfiles-dir "src/skk/SKK-JISYO.L"))
+#+end_src
+
+** ESS-mode
+http://ess.r-project.org/
+
+#+begin_src emacs-lisp
+(require 'ess-site)
+#+end_src
+
+** Twittering-mode
+http://twmode.sourceforge.net/ja/
+
+#+begin_src emacs-lisp
+(require 'twittering-mode)
+#+end_src
+
+** Magit and Gist
+
+#+begin_src emacs-lisp
+(require 'magit)
+(require 'gist)
+#+end_src
+
+** Text Translator
+How to install:
+#+begin_example
+(auto-install-batch "text translator")
+#+end_example
+
+#+begin_src emacs-lisp
+(require 'text-translator)
+(setq text-translator-auto-selection-func
+  'text-translator-translate-by-auto-selection-enja)
+#+end_src
+
+** Grep, lv
+lv homepage:
+http://www.ff.iij4u.or.jp/~nrt/lv/index.html
+
+How to install:
+#+begin_example
+(install-elisp-from-emacswiki "igrep.el")
+(install-elisp-from-emacswiki "grep-a-lot.el")
+(install-elisp-from-emacswiki "grep-edit.el")
+#+end_example
+
+#+begin_src emacs-lisp
+(require 'igrep)
+(igrep-define lgrep (igrep-use-zgrep nil) (igrep-regex-option "-n -Ou8"))
+(igrep-find-define lgrep (igrep-use-zgrep nil) (igrep-regex-option "-n -Ou8"))
+(require 'grep-a-lot)
+(grep-a-lot-setup-keys)
+(grep-a-lot-advise igrep)
+(require 'grep-edit)
+#+end_src
+
+** Fossil
+http://chiselapp.com/user/venks/repository/emacs-fossil/doc/tip/doc/index.wiki
+
+#+begin_src emacs-lisp
+(add-to-list 'vc-handled-backends 'Fossil)
+(require 'vc-fossil)
+#+end_src
+
+** Gtags
+http://www.tamacom.com/software-j.html
+
+#+begin_src emacs-lisp
+(require 'gtags)
+(add-hook 'c-mode-common-hook 'gtags-mode)
+(add-hook 'c++-mode-hook 'gtags-mode)
+(add-hook 'java-mode-hook 'gtags-mode)
+(setq gtags-path-style 'relative)
+(setq gtags-read-only t)
+;(setq gtags-pop-delete t)
+#+end_src
+
+** Color Theme
+
+#+begin_src emacs-lisp
+(require 'color-theme)
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)))
+(color-theme-railscasts)
+#+end_src
+
+* Anything
+How to install:
+#+begin_example
+(auto-install-batch "anything")
+(install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
+#+end_example
+
+#+begin_src emacs-lisp
+(require 'anything-startup)
+(setq descbinds-anything-window-style 'split-windo)
+
+(require 'anything-c-moccur)
+(global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
+(define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
+(define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur)
+
+(setq anything-c-adaptive-history-file "~/.emacs.d/state/anything-c-adaptive-history")
+
+(require 'anything-config)
+(defun my-anything ()
+  (interactive)
+  (anything-other-buffer '(anything-c-source-buffers
+                           anything-c-source-recentf)
+                         "*my anything*"))
+#+end_src
+
+* My previous init.el
 #+begin_src emacs-lisp
 ;; auto-async-byte-compile.el
 ;; (install-elisp-from-emacswiki "auto-async-byte-compile.el")
@@ -109,20 +350,6 @@
 (setq mocccur-split-word t)
 
 
-;; grep
-;; (install-elisp-from-emacswiki "igrep.el")
-;; http://www.ff.iij4u.or.jp/~nrt/lv/index.html
-;; (install-elisp-from-emacswiki "grep-a-lot.el")
-;; (install-elisp-from-emacswiki "grep-edit.el")
-(require 'igrep)
-(igrep-define lgrep (igrep-use-zgrep nil) (igrep-regex-option "-n -Ou8"))
-(igrep-find-define lgrep (igrep-use-zgrep nil) (igrep-regex-option "-n -Ou8"))
-(require 'grep-a-lot)
-(grep-a-lot-setup-keys)
-(grep-a-lot-advise igrep)
-(require 'grep-edit)
-
-
 ;; col-highlight.el
 ;; (auto-install-batch "col-highlight")
 (require 'col-highlight)
@@ -131,14 +358,10 @@
 ;; (col-highlight-set-interval 2)
 
 
-;; gist
-;; (install-elisp "https://github.com/defunkt/gist.el/raw/master/gist.el")
-(require 'gist)
-
-
 ;; shell-history.el
 ;; (install-elisp-from-emacswiki "shell-history.el")
 (require 'shell-history)
+(setq shell-history-file "~/.zdotdir/.zhistory")
 
 
 ;; text-adjust.el
@@ -150,7 +373,6 @@
 ;; viewer.el
 ;; (install-elisp-from-emacswiki "viewer.el")
 (require 'view)
-(key-chord-define-global "jk" 'view-mode)
 (define-key view-mode-map (kbd "N") 'View-search-last-regexp-backward)
 (define-key view-mode-map (kbd "?") 'View-search-regexp-backward)
 ;(define-key view-mode-map (kbd "G") 'View-goto-line-last)
@@ -177,15 +399,6 @@
 (define-overriding-view-mode-map emacs-lisp-mode
   ("RET" . find-function-at-point))
 (setq view-mode-by-default-regexp "\\.log$")
-
-
-;; paredit.el
-;; (install-elisp "http://mumble.net/~campbell/emacs/paredit.el")
-(require 'paredit)
-(add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
-(add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
-(add-hook 'lisp-mode-hook 'enable-paredit-mode)
-(add-hook 'ielm-mode-hook 'enable-paredit-mode)
 
 
 ;; eldoc.el
@@ -232,13 +445,6 @@
 (require 'summarye)
 
 
-;; text-translator.el
-;; (auto-install-batch "text translator")
-(require 'text-translator)
-(setq text-translator-auto-selection-func
-  'text-translator-translate-by-auto-selection-enja)
-
-
 ;; html-fold.el
 ;; (install-elisp "https://github.com/ataka/html-fold/raw/master/html-fold.el")
 (require 'html-fold)
@@ -275,174 +481,11 @@
 ;; multiverse.el
 ;; (install-elisp-from-emacswiki "multiverse.el")
 (require 'multiverse)
+#+end_src
 
-
-;; Fossil
-;; http://chiselapp.com/user/venks/repository/emacs-fossil/doc/tip/doc/index.wiki
-(add-to-list 'vc-handled-backends 'Fossil)
-(require 'vc-fossil)
-
-
-;; Gtags
-;; http://www.tamacom.com/software-j.html
-(require 'gtags)
-(add-hook 'c-mode-common-hook 'gtags-mode)
-(add-hook 'c++-mode-hook 'gtags-mode)
-(add-hook 'java-mode-hook 'gtags-mode)
-(setq gtags-path-style 'relative)
-(setq gtags-read-only t)
-;(setq gtags-pop-delete t)
-
-
-;; Calendar and Diary
-;; (setq calendar-latitude +35.427768)
-;; (setq calendar-longitude +140.296875)
-;; (setq calendar-location-name "Mobara, Japan")
-;; (setq calendar-time-zone +540)
-;; (setq calendar-standard-time-zone-name "JST")
-;; (setq calendar-daylight-time-zone-name "JST")
-;; (setq diary-file "~/org/diary")
-;; (setq calendar-date-style 'iso)
-;; ;(calendar-set-date-style 'iso)
-;; (setq calendar-week-start-day 1) ; Monday
-
-
-;; Anything
-;; (auto-install-batch "anything")
-(require 'anything-startup)
+* Key bindings
+#+begin_src emacs-lisp
+(key-chord-define-global "jk" 'view-mode)
 (key-chord-define-global "df" 'anything-for-files)
-(setq descbinds-anything-window-style 'split-windo)
-
-;; (install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
-(require 'anything-c-moccur)
-(global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
-(define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
-(define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur)
-
-(setq anything-c-adaptive-history-file "~/.emacs.d/state/anything-c-adaptive-history")
-
-(require 'anything-config)
-(defun my-anything ()
-  (interactive)
-  (anything-other-buffer '(anything-c-source-buffers
-                           anything-c-source-recentf)
-                         "*my anything*"))
-
-
-;; Miscellaneous
-;; See "Emacs Technique Bible" by Rubikitch p.59.
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "darkgreen")
-(savehist-mode 1)
-(setq-default save-place t)
-(setq save-place-file "~/.emacs.d/state/emacs-places")
-(require 'saveplace)
-(setq savehist-file "~/.emacs.d/state/history")
-(show-paren-mode 1)
-(global-set-key (kbd "C-h") 'delete-backward-char)
-(display-time)
-(line-number-mode 1)
-(column-number-mode 1)
-(transient-mark-mode 1)
-(setq gc-cons-threshold (* 10 gc-cons-threshold))
-(setq message-log-max 10000)
-(setq enable-recursive-minibuffers t)
-(setq use-dialog-box nil)
-(defalias 'message-box 'message)
-(setq history-length 1000)
-(setq echo-keystrokes 0.1)
-(setq large-file-warning-threshold (* 25 1024 1024))
-(defadvice abort-recursive-edit (before minibuffer-save activate)
-  (when (eq (selected-window) (active-minibuffer-window))
-    (add-to-history minibuffer-history-variable (minibuffer-contents))))
-(defalias 'yes-or-no-p 'y-or-n-p)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
-;; Miscellaneous part 2
-(ffap-bindings)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-(windmove-default-keybindings)
-(setq backup-directory-alist `(("." . ,(expand-file-name
-                                        (concat dotfiles-dir "backups")))))
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-(setq frame-title-format '(buffer-file-name "%f" ("%b")))
-
-
-;; Color theme
-(require 'color-theme)
-(eval-after-load "color-theme"
-  '(progn
-     (color-theme-initialize)))
-(color-theme-railscasts)
-
-
-;; Magit
-(require 'magit)
-
-
-;; (iswitchb-mode 1)
-;; (setq read-buffer-function 'iswitchb-read-buffer)
-;; (setq iswitchb-regexp nil)
-;; (setq iswitchb-prompt-newbuffer nil)
-;; (ido-mode 1)
-;; (ido-everywhere 1)
-
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-(setq uniquify-ignore-buffers-re "*[^*]+*")
-
-(setq bookmark-save-flag 1)
-(progn
-  (setq bookmark-sort-flag nil)
-  (defun bookmark-arrange-latest-top ()
-    (let ((latest (bookmark-get-bookmark bookmark)))
-      (setq bookmark-alist (cons latest (delq latest bookmark-alist))))
-    (bookmark-save))
-  (add-hook 'bookmark-after-jump-hook 'bookmark-arrange-latest-top))
-(setq bookmark-default-file "~/.emacs.d/state/emacs.bmk")
-
-;; (setq server-host "localhost")
-;; (setq server-use-tcp t)
-;; (server-start)
-
-(define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
-
-(auto-insert-mode)
-(setq auto-insert-directory "~/.emacs.d/insert/")
-;; (define-auto-insert "\\.txt$" "hoge-template.txt")
-;; (define-auto-insert "\\.txt$" (lambda () (insert "time") (yas/expand)))
-
-(defvar kmacro-save-file "~/.emacs.d/state/kmacro"
-  "File that keeps your keyboard macros.")
-(defun kmacro-save (symbol)
-  (interactive "SName for last kbd macro: ")
-  (name-last-kbd-macro symbol)
-  (with-current-buffer (find-file-noselect kmacro-save-file)
-    (goto-char (point-max))
-    (insert-kbd-macro symbol)
-    (basic-save-buffer)))
-(if (file-exists-p kmacro-save-file) (load kmacro-save-file))
-
-(global-set-key (kbd "C-c r") 'query-replace)
-(defalias 'qrr 'query-replace-regexp)
-
-(follow-mode)
 (key-chord-define-global "fm" 'follow-delete-other-windows-and-split)
-
-(require 'hideif)
-(add-hook 'c-mode-common-hook 'hide-ifdef-mode)
-
-(which-func-mode 1)
-(setq which-func-modes t)
-;; (delete (assoc 'which-func-mode mode-line-format) mode-line-format)
-;; (setq-default header-line-format '(which-func-mode ("" which-func-format)))
-
-;; flymake-mode
-;; http://www.emacswiki.org/emacs/FlyMake
-;; Add following line into your Makefile.
-;; CC=gcc
-;; check-syntax:
-;; <TAB>$(CC) $(CFLAGS) -Wall -Wextra -pedantic -fsyntax-only $(CHK_SOURCES)
-;(add-hook 'c-mode-common-hook (lambda () (flymake-mode t)))
 #+end_src
