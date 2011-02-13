@@ -177,13 +177,29 @@ FYI.
 #+end_example
 
 ** Tags
+[[info:org:Setting%20tags][info:org:Setting tags]]
 You can make a group using =(:startgroup . nil)= and =(:endgroup . nil)=.
 
 #+begin_src emacs-lisp
-  (setq org-tag-alist '(("home" . ?h)
-                        ("work" . ?w)
-                        ("desk" . ?d)
-                        ("mobile" . ?m)))
+  (setq org-tag-alist '((:startgroup . nil)
+                        ("home" . ?h)
+                        ("biz" . ?b)
+                        ("fun" . ?f)
+                        (:endgroup . nil)
+                        (:startgroup . nil)
+                        ("car" . nil)
+                        ("book" . nil)
+                        ("pc" . nil)
+                        ("web" . nil)
+                        ("mobile" . nil)
+                        (:endgroup . nil)
+                        ("reading" . ?r)
+                        ("writing" . ?w)
+                        ("hacking" . ?p)
+                        ("trading" . ?t)
+                        ("idea" . ?i)
+                        ("english" . ?e)
+                        ))
 #+end_src
 
 FYI.
@@ -196,7 +212,10 @@ FYI.
 
 #+begin_src emacs-lisp
   (setq org-todo-keywords
-        '((sequence "TODO(t!)" "STARTED(s!)" "WAITING(w@/!)" "|" "DONE(x!)" "CANCELD(c@)")
+        '((sequence "TODO(t!)"
+                    "PLANNING(p!)" "WORKING(w!)"
+                    "WAITING(a@/!)" "PENDING(b@/!)"
+                    "|" "DONE(x!)" "CANCELD(c@)")
           (sequence "APPT(a!)" "|" "DONE(x!)" "CANCELD(c@)")))
   (setq org-log-into-drawer t)
 #+end_src
@@ -215,10 +234,20 @@ FYI.
   (setq org-default-notes-file (concat org-directory "notes.org"))
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
-           "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:\n%i\n%a")
+           "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:\n%i\n%a"
+           :empty-lines 1)
           ("x" "org-protocol" entry (file+headline org-default-notes-file "Inbox")
            "* %:description\n:LOGBOOK:\n- Created on %U\n:END:\nSource: %:link\n%:initial"
            :immediate-finish t :empty-lines 1)))
+#+end_src
+
+*** Emacs server
+
+#+begin_src emacs-lisp :tangle no
+(setq server-host "localhost")
+(setq server-use-tcp t)
+(server-start)
+(require 'org-protocol)
 #+end_src
 
 ** Refile
@@ -235,8 +264,7 @@ FYI.
   (setq archives-dir (concat org-directory "archives"))
   (make-directory archives-dir t)
   (setq org-archive-location (concat archives-dir "/"
-                                     (format-time-string "%Y"
-                                     (current-time))
+                                     (format-time-string "%Y" (current-time))
                                      ".org::"))
 #+end_src
 
