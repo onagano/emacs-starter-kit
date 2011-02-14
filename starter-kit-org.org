@@ -212,16 +212,16 @@ FYI.
 
 #+begin_src emacs-lisp
   (setq org-todo-keywords
-        '((sequence "TODO(t!)"
-                    "PLANNING(p!)" "WORKING(w!)"
-                    "WAITING(a@/!)" "PENDING(b@/!)"
-                    "|" "DONE(x!)" "CANCELD(c@)")
-          (sequence "APPT(a!)" "|" "DONE(x!)" "CANCELD(c@)")))
-  (setq org-log-into-drawer t)
+        '((sequence "TODO(t)"
+                    "PLANNING(p)" "WORKING(w)"
+                    "WAITING(a)" "PENDING(b)"
+                    "|" "DONE(x)" "CANCELD(c)")
+          (sequence "APPT(a)" "|" "DONE(x)" "CANCELD(c)")))
 #+end_src
 
 FYI.
 #+begin_example
+(setq org-log-into-drawer t)
 (setq org-use-fast-todo-selection t)
 (setq org-log-done 'note)
 #+end_example
