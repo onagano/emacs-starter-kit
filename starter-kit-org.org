@@ -234,19 +234,19 @@ FYI.
   (setq org-default-notes-file (concat org-directory "notes.org"))
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
-           "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:\n%i\n%a"
+           "* TODO %?\n%i\n%a"
            :empty-lines 1)
           ("x" "org-protocol" entry (file+headline org-default-notes-file "Inbox")
-           "* %:description\n:LOGBOOK:\n- Created on %U\n:END:\nSource: %:link\n%:initial"
+           "* %:description\nSource: %:link\n%:initial"
            :immediate-finish t :empty-lines 1)))
 #+end_src
 
 *** Emacs server
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (setq server-host "localhost")
 (setq server-use-tcp t)
-(server-start)
+;(server-start)
 (require 'org-protocol)
 #+end_src
 
