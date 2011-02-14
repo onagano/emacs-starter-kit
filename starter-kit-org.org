@@ -254,16 +254,14 @@ FYI.
 [[info:org:Refiling%20notes][info:org:Refiling notes]]
 
 #+begin_src emacs-lisp
-  (setq org-refile-targets '((org-agenda-files . (:level . 1))))
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 1))))
 #+end_src
 
 ** Archive
 [[info:org:Archiving]]
 
 #+begin_src emacs-lisp
-  (setq archives-dir (concat org-directory "archives"))
-  (make-directory archives-dir t)
-  (setq org-archive-location (concat archives-dir "/"
+  (setq org-archive-location (concat (concat org-directory "archives/")
                                      (format-time-string "%Y" (current-time))
                                      ".org::"))
 #+end_src
@@ -278,15 +276,11 @@ The file is [[~/.emacs.d/emacs-custom.el]].
 #+begin_src emacs-lisp
   (require 'org-mobile)
   (setq org-mobile-directory "~/Dropbox/MobileOrg")
-  (setq org-mobile-inbox-for-pull "~/org/from-mobile.org")
+  (setq org-mobile-inbox-for-pull org-default-notes-file)
   (setq org-mobile-force-id-on-agenda-items nil)
+  (setq org-mobile-use-encryption t)
+  (setq org-mobile-encryption-password "pA55w0rd")
 #+end_src
-
-FYI.
-#+begin_example
-(setq org-mobile-use-encryption nil)
-(setq org-mobile-encryption-password "")
-#+end_example
 
 ** RSS
 The the info document [[info:org:RSS%20Feeds][info:org:RSS Feeds]] for details.
