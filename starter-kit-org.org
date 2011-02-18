@@ -163,11 +163,17 @@ Additionally, my settings.
 #+begin_src emacs-lisp
   (setq org-startup-indented t)
   (setq org-startup-folded 'content)
-  (setq org-return-follows-link t)
   (setq org-directory "~/org/")
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c l") 'org-store-link)
+#+end_src
+
+** Links
+#+begin_src emacs-lisp
+  (setq org-return-follows-link t)
+  (require 'org-id)
+  (setq org-id-locations-file "~/.emacs.d/state/org-id-locations")
 #+end_src
 
 FYI.
@@ -199,6 +205,7 @@ You can make a group using =(:startgroup . nil)= and =(:endgroup . nil)=.
                         ("trading" . ?t)
                         ("idea" . ?i)
                         ("english" . ?e)
+                        ("readlater" . ?l)
                         ))
 #+end_src
 
@@ -212,16 +219,16 @@ FYI.
 
 #+begin_src emacs-lisp
   (setq org-todo-keywords
-        '((sequence "TODO(t)"
-                    "PLANNING(p)" "WORKING(w)"
-                    "WAITING(a)" "PENDING(b)"
-                    "|" "DONE(x)" "CANCELD(c)")
-          (sequence "APPT(a)" "|" "DONE(x)" "CANCELD(c)")))
+        '((sequence "TODO(t!)"
+                    "PLANNING(p!)" "WORKING(w!)"
+                    "WAITING(a!)" "PENDING(b!)"
+                    "|" "DONE(x!)" "CANCELD(c!)")
+          (sequence "APPT(a!)" "|" "DONE(x!)" "CANCELD(c!)")))
+(setq org-log-into-drawer t)
 #+end_src
 
 FYI.
 #+begin_example
-(setq org-log-into-drawer t)
 (setq org-use-fast-todo-selection t)
 (setq org-log-done 'note)
 #+end_example
@@ -234,10 +241,10 @@ FYI.
   (setq org-default-notes-file (concat org-directory "notes.org"))
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
-           "* TODO %?\n%i\n%a"
+           "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:\n%i\n%a"
            :empty-lines 1)
           ("x" "org-protocol" entry (file+headline org-default-notes-file "Inbox")
-           "* %:description\nSource: %:link\n%:initial"
+           "* TODO %:description\n:LOGBOOK:\n- Created on %U\n:END:\nSource: %:link\n#+begin_quote\n%:initial\n#+end_quote"
            :immediate-finish t :empty-lines 1)))
 #+end_src
 
@@ -277,7 +284,7 @@ The file is [[~/.emacs.d/emacs-custom.el]].
   (require 'org-mobile)
   (setq org-mobile-directory "~/Dropbox/MobileOrg")
   (setq org-mobile-inbox-for-pull org-default-notes-file)
-  (setq org-mobile-force-id-on-agenda-items nil)
+;  (setq org-mobile-force-id-on-agenda-items nil)
   (setq org-mobile-use-encryption t)
   (setq org-mobile-encryption-password "pA55w0rd")
 #+end_src

@@ -8,19 +8,21 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 Support for the [[http://www.ruby-lang.org/en/][Ruby]] dynamic, open-source programming language.
 
 #+begin_src emacs-lisp
-(eval-after-load 'ruby-mode
-  '(progn
-     ;; work around possible elpa bug
-     (ignore-errors (require 'ruby-compilation))
-     (setq ruby-use-encoding-map nil)
-     (add-hook 'ruby-mode-hook 'inf-ruby-keys)
-     (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
-     (define-key ruby-mode-map (kbd "C-M-h") 'backward-kill-word)
-     (define-key ruby-mode-map (kbd "C-c l") "lambda")))
+  (eval-after-load 'ruby-mode
+    '(progn
+       ;; work around possible elpa bug
+       (ignore-errors (require 'ruby-compilation))
+       (setq ruby-use-encoding-map nil)
+       (add-hook 'ruby-mode-hook 'inf-ruby-keys)
+       ;; (define-key ruby-mode-map (kbd "RET") 'reindent-then-newline-and-indent)
+       ;; (define-key ruby-mode-map (kbd "C-M-h") 'backward-kill-word)
+       ;; (define-key ruby-mode-map (kbd "C-c l") "lambda")
+       ))
 #+end_src
 
 #+begin_src emacs-lisp
-(global-set-key (kbd "C-h r") 'ri)
+(require 'ri)
+;(global-set-key (kbd "C-h r") 'ri)
 #+end_src
 
 ** Rake files are ruby, too, as are gemspecs.
