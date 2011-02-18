@@ -298,7 +298,8 @@ How to install:
   (require 'auto-async-byte-compile)
   (setq auto-async-byte-compile-exclude-files-regexp "\\(/.emacs.d/[^/]*.el$\\|/junk/\\)")
   (add-hook 'emacs-lisp-mode-hook 'enable-auto-async-byte-compile-mode)
-  
+  ;(auto-async-byte-compile-mode)
+
   
   ;; (install-elisp-from-emacswiki "sticky.el")
   (require 'sticky)
@@ -382,6 +383,7 @@ How to install:
   ;; (install-elisp "http://homepage3.nifty.com/oatu/emacs/archives/auto-save-buffers.el")
   (require 'auto-save-buffers)
   (run-with-idle-timer 300 t 'auto-save-buffers)
+  ;(auto-save-buffers-toggle)
   
   
   ;; sense-region.el

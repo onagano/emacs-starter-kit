@@ -2,6 +2,9 @@
 
 * Paths
 ** Path for executables
+:PROPERTIES:
+:ID: B3BF5558-DFCB-4E12-95D6-51199FD7045F
+:END:
 The default contains only followings.
 #+begin_example
 ("/usr/bin" "/bin" "/usr/sbin" "/sbin"
@@ -12,6 +15,31 @@ Ensure to include those like w3m, git, etc.
 #+begin_src emacs-lisp
 (setq exec-path (cons "/usr/local/bin" exec-path))
 (setq exec-path (cons "/usr/local/git/bin" exec-path))
+(setq exec-path (cons (expand-file-name "~/.gem/ruby/1.8/bin") exec-path))
+(setq exec-path (cons (expand-file-name "~/bin") exec-path))
+#+end_src
+
+#+begin_src sh
+echo $PATH | tr ':' '\n'
+#+end_src
+
+#+results:
+| /usr/local/bin     |
+| /usr/bin           |
+| /bin               |
+| /usr/sbin          |
+| /sbin              |
+| /usr/local/git/bin |
+| /usr/texbin        |
+| /usr/X11/bin       |
+
+#+begin_src emacs-lisp
+  (setenv "PATH" (concat
+                  (expand-file-name "~/bin:")
+                  (expand-file-name "~/.gem/ruby/1.8/bin:")
+                  "/usr/local/git/bin:"
+                  "/usr/local/bin:"
+                  (getenv "PATH")))
 #+end_src
 
 ** Path for elisp libraries
@@ -40,6 +68,9 @@ automatically added to the load-path by =normal-top-level-add-subdirs-to-load-pa
 See [[file:starter-kit.org::*E-lisp%20customization][E-lisp customization]] for detail.
 
 ** Migemo
+:PROPERTIES:
+:ID: 5C73B142-C710-4D04-BFBD-71FA3F559FD2
+:END:
 http://0xcc.net/migemo/
 http://plus-alpha-space.cocolog-nifty.com/blog/2009/12/carbon-emacsmig.html
 http://www.kaoriya.net/#CMIGEMO
@@ -56,10 +87,29 @@ http://d.hatena.ne.jp/samurai20000/20100907/1283791433
 #+end_src
 
 ** W3M
+:PROPERTIES:
+:ID: E7E9085C-4307-463E-86C3-2F5DF44B58BA
+:END:
 http://w3m.sourceforge.net/index.ja.html
 
 #+begin_src emacs-lisp
 (require 'w3m-load)
 ;(setq browse-url-browser-function 'browse-url-default-macosx-browser)
 ;(setq browse-url-browser-function 'w3m-browse-url)
+#+end_src
+** Rcodetools
+:PROPERTIES:
+:ID: 31BDD86D-8179-4C42-B7BB-F128BAA79AE3
+:END:
+Install rcodetools and fastri by gem first.
+And make sure to include them into the path.
+
+#+begin_example
+gem install rcodetools
+gem install fastri
+#+end_example
+
+#+begin_src emacs-lisp
+(require 'rcodetools)
+(require 'anything-rcodetools)
 #+end_src
