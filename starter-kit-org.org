@@ -240,10 +240,10 @@ FYI.
 #+begin_src emacs-lisp
   (setq org-default-notes-file (concat org-directory "notes.org"))
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
+        '(("t" "Todo" entry (file+headline org-default-notes-file "Captured items")
            "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:\n%i\n%a"
            :empty-lines 1)
-          ("x" "org-protocol" entry (file+headline org-default-notes-file "Inbox")
+          ("x" "org-protocol" entry (file+headline org-default-notes-file "Captured items")
            "* TODO %:description\n:LOGBOOK:\n- Created on %U\n:END:\nSource: %:link\n#+begin_quote\n%:initial\n#+end_quote"
            :immediate-finish t :empty-lines 1)))
 #+end_src
@@ -253,6 +253,7 @@ FYI.
 #+begin_src emacs-lisp
 (setq server-host "localhost")
 (setq server-use-tcp t)
+;(server-force-delete)
 ;(server-start)
 (require 'org-protocol)
 #+end_src

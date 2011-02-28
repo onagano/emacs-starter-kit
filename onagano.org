@@ -78,10 +78,6 @@ See "Emacs Technique Bible" by Rubikitch p.59.
   (add-hook 'bookmark-after-jump-hook 'bookmark-arrange-latest-top))
 (setq bookmark-default-file "~/.emacs.d/state/emacs.bmk")
 
-;; (setq server-host "localhost")
-;; (setq server-use-tcp t)
-;; (server-start)
-
 (define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
 
 (auto-insert-mode)
@@ -259,35 +255,6 @@ http://www.tamacom.com/software-j.html
 (color-theme-railscasts)
 #+end_src
 
-* Anything
-:PROPERTIES:
-:ID: 04447E96-E798-47F8-BD8C-7A26C6D784C9
-:END:
-How to install:
-#+begin_example
-(auto-install-batch "anything")
-(install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
-#+end_example
-
-#+begin_src emacs-lisp
-(require 'anything-startup)
-(setq descbinds-anything-window-style 'split-windo)
-
-(require 'anything-c-moccur)
-(global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
-(define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
-(define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur)
-
-(setq anything-c-adaptive-history-file "~/.emacs.d/state/anything-c-adaptive-history")
-
-(require 'anything-config)
-(defun my-anything ()
-  (interactive)
-  (anything-other-buffer '(anything-c-source-buffers
-                           anything-c-source-recentf)
-                         "*my anything*"))
-#+end_src
-
 * My previous init.el
 :PROPERTIES:
 :ID: 7B27D1BF-C1EB-4E13-BFEB-FE40E9998BD9
@@ -382,7 +349,7 @@ How to install:
   ;; auto-save-buffers.el
   ;; (install-elisp "http://homepage3.nifty.com/oatu/emacs/archives/auto-save-buffers.el")
   (require 'auto-save-buffers)
-  (run-with-idle-timer 300 t 'auto-save-buffers)
+  (run-with-idle-timer 60 t 'auto-save-buffers)
   ;(auto-save-buffers-toggle)
   
   
@@ -534,12 +501,60 @@ How to install:
   (require 'multiverse)
 #+end_src
 
+* Anything
+:PROPERTIES:
+:ID: 04447E96-E798-47F8-BD8C-7A26C6D784C9
+:END:
+
+How to install:
+#+begin_example
+(auto-install-batch "anything")
+#+end_example
+
+#+begin_src emacs-lisp
+(require 'anything-startup)
+(setq anything-c-adaptive-history-file "~/.emacs.d/state/anything-c-adaptive-history")
+(setq descbinds-anything-window-style 'split-window)
+(anything-complete-shell-history-setup-key (kbd "C-o"))
+
+(require 'anything-config)
+(defun my-anything ()
+  (interactive)
+  (anything-other-buffer '(anything-c-source-buffers
+                           anything-c-source-recentf)
+                         "*my anything*"))
+#+end_src
+
+** anything-c-moccur.el
+:PROPERTIES:
+:ID: 285262BD-C76F-4D0F-ADA2-107C46C90881
+:END:
+
+#+begin_example
+(install-elisp "http://svn.coderepos.org/share/lang/elisp/anything-c-moccur/trunk/anything-c-moccur.el")
+#+end_example
+
+#+begin_src emacs-lisp
+(require 'anything-c-moccur)
+(setq moccur-split-word t)
+;(global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
+(define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
+(define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur)
+#+end_src
+
+** Customize anything.el
+:PROPERTIES:
+:ID: 75AEE5F7-ACB7-4DAA-9FB6-36FF081D6B1F
+:END:
+
 * Key bindings
 :PROPERTIES:
 :ID: AD7E2844-9477-4F32-9663-62728383E286
 :END:
 #+begin_src emacs-lisp
 (key-chord-define-global "jk" 'view-mode)
-(key-chord-define-global "df" 'anything-for-files)
 (key-chord-define-global "fm" 'follow-delete-other-windows-and-split)
+(global-set-key (kbd "C-o") 'other-window)
+(global-set-key (kbd "C-;") 'anything-for-files)
+(global-set-key (kbd "M-y") 'anything-show-kill-ring)
 #+end_src
