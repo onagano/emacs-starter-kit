@@ -275,8 +275,13 @@ FYI.
 #+end_src
 
 ** Agenda
-This is managed by the customizing feature of Emacs.
+org-agenda-file is managed by the customizing feature of Emacs.
 The file is [[~/.emacs.d/emacs-custom.el]].
+
+#+begin_src emacs-lisp
+(setq org-agenda-window-setup 'current-window)
+(setq org-agenda-restore-windows-after-quit t)
+#+end_src
 
 ** MobileOrg
 [[http://mobileorg.ncogni.to/][MobileOrg]] is the iPhone application to handle and sync org-mode files.
