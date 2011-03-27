@@ -240,10 +240,10 @@ FYI.
 #+begin_src emacs-lisp
   (setq org-default-notes-file (concat org-directory "notes.org"))
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline org-default-notes-file "Captured items")
-           "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:\n%i\n%a"
-           :empty-lines 1)
-          ("x" "org-protocol" entry (file+headline org-default-notes-file "Captured items")
+        '(("t" "Todo" entry (file+headline "" "Todo items")
+           "* TODO %?\n:LOGBOOK:\n- Created on %U\n:END:\n%i\n%a")
+          ("j" "Journal" item (file+datetree "") "%?")
+          ("x" "org-protocol" entry (file+headline "" "Captured items")
            "* TODO %:description\n:LOGBOOK:\n- Created on %U\n:END:\nSource: %:link\n#+begin_quote\n%:initial\n#+end_quote"
            :immediate-finish t :empty-lines 1)))
 #+end_src
@@ -262,7 +262,7 @@ FYI.
 [[info:org:Refiling%20notes][info:org:Refiling notes]]
 
 #+begin_src emacs-lisp
-  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 1))))
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 2))))
 #+end_src
 
 ** Archive

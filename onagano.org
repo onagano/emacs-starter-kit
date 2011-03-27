@@ -1,4 +1,5 @@
 #+TITLE: User Specific Settings
+#+STARTUP: noindent
 
 * Available settings in standard distribution
 ** Better default settings
@@ -123,16 +124,16 @@ See "Emacs Technique Bible" by Rubikitch p.59.
 :ID: 8C09EDB4-8F66-496B-A42C-66C63FA02F0D
 :END:
 #+begin_src emacs-lisp
-;; (setq calendar-latitude +35.427768)
-;; (setq calendar-longitude +140.296875)
-;; (setq calendar-location-name "Mobara, Japan")
-;; (setq calendar-time-zone +540)
-;; (setq calendar-standard-time-zone-name "JST")
-;; (setq calendar-daylight-time-zone-name "JST")
-;; (setq diary-file "~/org/diary")
-;; (setq calendar-date-style 'iso)
-;; ;(calendar-set-date-style 'iso)
-;; (setq calendar-week-start-day 1) ; Monday
+  (setq calendar-latitude +35.427768)
+  (setq calendar-longitude +140.296875)
+  (setq calendar-location-name "Mobara, Japan")
+  (setq calendar-time-zone +540)
+  (setq calendar-standard-time-zone-name "JST")
+  (setq calendar-daylight-time-zone-name "JST")
+  (setq diary-file "~/org/diary")
+  (setq calendar-date-style 'iso)
+  ;(calendar-set-date-style 'iso)
+  (setq calendar-week-start-day 1) ; Monday
 #+end_src
 
 * Tools
@@ -562,4 +563,14 @@ How to install:
 (global-set-key (kbd "C-o") 'other-window)
 (global-set-key (kbd "C-;") 'anything-for-files)
 (global-set-key (kbd "M-y") 'anything-show-kill-ring)
+#+end_src
+
+* Window settings
+:PROPERTIES:
+:ID: C3F7F947-E7C1-4F79-99BD-D403FFDF60B2
+:END:
+
+#+begin_src emacs-lisp
+(ns-toggle-fullscreen)
+;(make-3-column-buffers)
 #+end_src
